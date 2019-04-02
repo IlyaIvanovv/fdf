@@ -6,22 +6,14 @@
 /*   By: arunte <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/07 18:07:00 by arunte            #+#    #+#             */
-/*   Updated: 2019/03/28 19:04:52 by arunte           ###   ########.fr       */
+/*   Updated: 2019/04/01 14:28:08 by arunte           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx.h"
-#include <unistd.h>
 #include "FdF.h"
-#include <stdlib.h>
 
-
-void draw_line(t_pixel *dot1, t_pixel *dot2, t_window *window)
+/*void draw_line(t_pixel *dot1, t_pixel *dot2, t_window *window)
 {
-//	int x1 = sx1;
-//	int x2 = ex2;
-//	int y1 = sy1;
-//	int y2 = ey2;
 	const int deltaX = abs(dot2->x - dot1->x);
 	const int deltaY = abs(dot2->y - dot1->y);
 	const int signX = dot1->x < dot2->x ? 1 : -1;
@@ -46,80 +38,83 @@ void draw_line(t_pixel *dot1, t_pixel *dot2, t_window *window)
 			dot1->y += signY;
 		}
 	}
-}
+}*/
 
-void ft_putchar(char c)
+/*void ft_putchar(char c)
 {
 	write(1, &c, 1);
+}*/
+
+//int deal_key(int key, void *param)
+//{
+//	t_pixel *dot1;
+
+	///pixel = (t_pixel *)param;
+//	if (key == 53)
+//		exit(0);
+//	return (0);
+//}
+
+//int *read_map(char **line, int fd, t_map *map)
+//{
+//	char	**tmp;
+//	int		i;
+//	int		j;
+//
+//	i = 0;
+//	j = 0;
+//	while ((get_next_line(fd, &line) > 0))
+//		{
+//			/*if (!(tmp = ft_strsplit(line, ' ')))
+//	        	return (NULL);
+//			while (tmp[i])
+//				i++;
+//			//*tmp = (t_map)malloc(sizeof(t_map) * i + 1);*/
+//    	}
+//}
+
+int first_read_map(char *line, int fd, t_map *map)
+{
+    while ((get_next_line(fd, &line) > 0))
+    {
+        map->width = (int) ft_words_n(line, ' ');
+        map->height++;
+    }
+	return 1;
 }
 
-int deal_key(int key, void *param)
+void    init_map_content(t_map *map)
 {
-	t_pixel *dot1;
-	t_pixel *dot2;
-
-	pixel = (t_pixel *)param;
-	draw_line();
-	draw_line(pixel->x1, pixel->y1, pixel->x3, pixel->y3, pixel);
-	draw_line(pixel->x2, pixel->y2, pixel->x3, pixel->y3, pixel);
-	pixel->x1 = pixel->x3;
-	pixel->y1 = pixel->y3;
-	pixel->x2 += 50;
-	pixel->y2 = 50;
-	if (key == 53)
-		exit(0);
-	return (0);
+    map->matrix = malloc(map->width * map->height * sizeof(t_pixel));// map->pixel[i] OR map->pixel[i*map->width + j] => map->pixel.x = j  map->pixel.y = i
 }
 
-int main()
+int main(int argc, char **argv)
 {
-	t_pixel *dot1;
-	t_pixel *dot2;
-	t_window *window
-
-	dot1->x = 0;
-	dot1->y = 0;
-	dot2->x = 0;
-	dot2->y = 50;
+    int fd;
+    char *line;
+    t_map map;
+    line = ft_strnew(1);
+    if (argc != 2) {
+        perror("No walid file");
+        exit(0);
+    }
+    fd = open(argv[1], O_RDONLY);
+    if (fd == -1)
+        ft_putstr("Error");
+    if (!(first_read_map(line, fd, &map)))
+    {
+		ft_putstr("warning");
+		close(fd);
+	}
+    init_map_content(&map);
+    return (0);
+}
+              
+/*
+{
 	window->mlx_ptr = mlx_init();
 	window->win_ptr = mlx_new_window(window->mlx_ptr, 1000, 1000, "mlx 42");
 	mlx_key_hook(window->win_ptr, deal_key, (void *)window);
 	mlx_loop(window->mlx_ptr);
 }
-
-int *read_map(char **line, const int fd)
-{
-	char	*tmp;
-	char	read[BUFF_SIZE + 1];
-	int		ret;
-	char	*map
-
-	fd = open (text, O_RDONLY);
-     
-	while ((ret = read(fd, read, BUFF_SIZE)) > 0)
-	{
-		read[ret] = '\0';
-		if (*map)
-		{
-			tmp = map;
-			map = ft_strjoin(tmp, read);
-			free(tmp);
-		}
-		else
-			map = ft_strdup(read);
-	}
-	return (ft_strsplit(**map, '\n'));
-}
-
-int main(int argc, char **argv)
-{
-	int	fd;
-
-	if (argc != 2)
-	{
-		perror("No walid file");
-			exit(0);
-	}
-		read_map((argv[1]));
-}
-
+*/
