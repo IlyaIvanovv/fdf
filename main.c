@@ -12,33 +12,33 @@
 
 #include "FdF.h"
 
-/*void draw_line(t_pixel *dot1, t_pixel *dot2, t_window *window)
-{
-	const int deltaX = abs(dot2->x - dot1->x);
-	const int deltaY = abs(dot2->y - dot1->y);
-	const int signX = dot1->x < dot2->x ? 1 : -1;
-	const int signY = dot1->y < dot2->y ? 1 : -1;
-	//
-    int error = deltaX - deltaY;
-	//
-	mlx_pixel_put(window->mlx_ptr, window->win_ptr, dot2->x, dot2->y, 0xFFFFFF);
-	while (dot1->x != dot2->x || dot1->y != dot2->y)
-	{
-		mlx_pixel_put(window->mlx_ptr, window->win_ptr, dot1->x, dot1->y, 0xFFFFFF);
-        int error2 = error * 2;
-
-		if (error2 > -deltaY)
-		{
-			error -= deltaY;
-			dot1->x += signX;
-		}
-		if (error2 < deltaX)
-		{
-			error += deltaX;
-			dot1->y += signY;
-		}
-	}
-}*/
+//void draw_line(t_pixel *dot1, t_pixel *dot2, t_window *window)
+//{
+//	const int deltaX = abs(dot2->x - dot1->x);
+//	const int deltaY = abs(dot2->y - dot1->y);
+//	const int signX = dot1->x < dot2->x ? 1 : -1;
+//	const int signY = dot1->y < dot2->y ? 1 : -1;
+//	//
+//    int error = deltaX - deltaY;
+//	//
+//	mlx_pixel_put(window->mlx_ptr, window->win_ptr, dot2->x, dot2->y, 0xFFFFFF);
+//	while (dot1->x != dot2->x || dot1->y != dot2->y)
+//	{
+//		mlx_pixel_put(window->mlx_ptr, window->win_ptr, dot1->x, dot1->y, 0xFFFFFF);
+//        int error2 = error * 2;
+//
+//		if (error2 > -deltaY)
+//		{
+//			error -= deltaY;
+//			dot1->x += signX;
+//		}
+//		if (error2 < deltaX)
+//		{
+//			error += deltaX;
+//			dot1->y += signY;
+//		}
+//	}
+//}
 
 /*void ft_putchar(char c)
 {
@@ -55,24 +55,6 @@
 //	return (0);
 //}
 
-//int *read_map(char **line, int fd, t_map *map)
-//{
-//	char	**tmp;
-//	int		i;
-//	int		j;
-//
-//	i = 0;
-//	j = 0;
-//	while ((get_next_line(fd, &line) > 0))
-//		{
-//			/*if (!(tmp = ft_strsplit(line, ' ')))
-//	        	return (NULL);
-//			while (tmp[i])
-//				i++;
-//			//*tmp = (t_map)malloc(sizeof(t_map) * i + 1);*/
-//    	}
-//}
-
 int first_read_map(char *line, int fd, t_map *map)
 {
     while ((get_next_line(fd, &line) > 0))
@@ -85,8 +67,30 @@ int first_read_map(char *line, int fd, t_map *map)
 
 void    init_map_content(t_map *map)
 {
-    map->matrix = malloc(map->width * map->height * sizeof(t_pixel));// map->pixel[i] OR map->pixel[i*map->width + j] => map->pixel.x = j  map->pixel.y = i
+    int i;
+    i = 0;
+    map->matrix = (t_pixel *)malloc(map->width * map->height * sizeof(t_pixel));// map->pixel[i] OR map->pixel[i*map->width + j] => map->pixel.x = j  map->pixel.y = i
+    while (i < map->width * map->height)
+    {
+        map->matrix[i].x = i % map->width;
+        map->matrix[i].y = i / map->width;
+        map->matrix[i].z = 0;
+        map->matrix[i].color = 0xFFFFFF;
+        i++;
+    }
+  //  map_draw(map);
 }
+
+//int     map_draw(t_map *map)
+//{
+  //  int i;
+   // i = 0;
+   // while (i <= map->matrix->x)
+   // {
+
+   // }
+
+//}
 
 int main(int argc, char **argv)
 {
