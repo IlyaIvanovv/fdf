@@ -27,7 +27,7 @@ typedef struct s_pixel
 
 typedef struct	s_map
 {
-	t_pixel	**matrix;
+	t_pixel	*matrix;
 	int		height;
 	int		width;
 }				t_map;
@@ -37,3 +37,5 @@ typedef struct s_window
 	void	*mlx_ptr;
 	void	*win_ptr;
 }				t_window;
+
+//int     map_draw(t_map *map);
