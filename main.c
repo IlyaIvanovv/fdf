@@ -19,9 +19,7 @@ void draw_line(t_pixel dot1, t_pixel dot2, t_map *map)
 	const int deltaY = abs(dot2.y - dot1.y);
 	const int signX = dot1.x < dot2.x ? 1 : -1;
 	const int signY = dot1.y < dot2.y ? 1 : -1;
-	//
     int error = deltaX - deltaY;
-	//
 	mlx_pixel_put(map->window.mlx_ptr, map->window.win_ptr, dot2.x, dot2.y, map->matrix->color);
 	while (dot1.x != dot2.x || dot1.y != dot2.y)
 	{
@@ -44,38 +42,84 @@ void draw_line(t_pixel dot1, t_pixel dot2, t_map *map)
 
 static void iso(t_map *map)
 {
-        int i;
-        i = 0;
-        double prev_z;
-        double prev_y;
-        int y2,z2;
-        double  angle;
+    int i;
+    i = 0;
+    int prev_x;
+    int prev_y;
+    int prev_z;
 
-        while (i < map->width * map->height)
-        {
-            angle = (double)(map->alpha) * 3.14 / 180;
-            prev_z = (double)(map->matrix[i].z);
-            prev_y = (double)(map->matrix[i].y);
-            y2 = (int)((prev_y * cos(angle)) + (prev_z * sin(angle)));
-            z2 = -(int)((prev_y * sin(angle)) + (prev_z * cos(angle)));
-            map->matrix[i].y = y2;
-            map->matrix[i].z = z2;
-            i++;
-        }
+    while (i < map->width * map->height)
+    {
+        prev_x = map->matrix[i].x;
+        prev_y = map->matrix[i].y;
+        prev_z = map->matrix[i].z;
+
+        map->matrix[i].x = (int) ((prev_x - prev_y) * cos(0.523599));
+        map->matrix[i].y = (int)((prev_x + prev_y) * sin(0.523599) - prev_z);
+        i++;
+    }
+
+    map_draw(map);
 }
 
 int		key_press(int keycode, void *map)
 {
+    int i;
+
     t_map *tmp;
 
     tmp = (t_map *)map;
     if (keycode == 53)
         exit(EXIT_SUCCESS);
-    if (keycode == 69)
+//    if (keycode == 69)
+//    {
+//        tmp->alpha += 1;
+//        mlx_clear_window(tmp->window.mlx_ptr, tmp->window.win_ptr);
+//        iso(tmp);
+//        map_draw(tmp);
+//    }
+    if (keycode == 124)
     {
-        tmp->alpha += 1;
+        i = 0;
         mlx_clear_window(tmp->window.mlx_ptr, tmp->window.win_ptr);
-        iso(tmp);
+        while (i < tmp->width * tmp->height)
+        {
+            tmp->matrix[i].x += 10;
+            i++;
+        }
+        map_draw(tmp);
+    }
+    if (keycode == 123)
+    {
+        i = 0;
+        mlx_clear_window(tmp->window.mlx_ptr, tmp->window.win_ptr);
+        while (i < tmp->width * tmp->height)
+        {
+            tmp->matrix[i].x -= 10;
+            i++;
+        }
+        map_draw(tmp);
+    }
+    if (keycode == 126)
+    {
+        i = 0;
+        mlx_clear_window(tmp->window.mlx_ptr, tmp->window.win_ptr);
+        while (i < tmp->width * tmp->height)
+        {
+            tmp->matrix[i].y += 10;
+            i++;
+        }
+        map_draw(tmp);
+    }
+    if (keycode == 125)
+    {
+        i = 0;
+        mlx_clear_window(tmp->window.mlx_ptr, tmp->window.win_ptr);
+        while (i < tmp->width * tmp->height)
+        {
+            tmp->matrix[i].y -= 10;
+            i++;
+        }
         map_draw(tmp);
     }
     return (0);
@@ -111,13 +155,13 @@ void    init_map_content(t_map *map)
     map->matrix = (t_pixel *)malloc(map->width * map->height * sizeof(t_pixel)); // map->pixel[i] OR map->pixel[i*map->width + j] => map->pixel.x = j  map->pixel.y = i
     while (i < map->width * map->height)
     {
-        map->matrix[i].x = i % map->width * 10 + SIZE_X / 2 - map->width * 20 / 2;
-        map->matrix[i].y = i / map->width * 10 + SIZE_Y / 2 - map->height * 20 / 2;
-        map->matrix[i].z = ft_atoi(map->tmp[i / map->width][i % map->width]) * 10;
+        map->matrix[i].x = i % map->width * 20 + SIZE_X / 2 - map->width * 20 / 2;
+        map->matrix[i].y = i / map->width * 20 + SIZE_Y / 2 - map->height * 20 / 2;
+        map->matrix[i].z = ft_atoi(map->tmp[i / map->width][i % map->width]) * 20;
         map->matrix[i].color = 0xFF6600;
         i++;
     }
-    map->alpha = 0;
+   // map->alpha = 0;
     iso(map);
     map_draw(map);
 }
