@@ -40,7 +40,7 @@ typedef struct	s_map
     int		height;
     int		width;
     char    ***tmp;
-    int     alpha;
+    double     alpha;
     t_window    window;
 }				t_map;
 
